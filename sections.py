@@ -20,9 +20,27 @@ class Section(BaseModel):
         attach_classes = " ".join(attach_classes_list)
         return dcc.Graph(id=graph_id, className=attach_classes)
 
+    def sub_section_header(
+            self,
+            sub_section_name: str,
+            attach_classes: str = None
+    ):
+        if attach_classes is None:
+            attach_classes = "sub-section-header"
+        return html.H5(sub_section_name, className=attach_classes)
 
-class LpNormSection(Section):
-    title: str = "Lp Norms"
+    def text_block(
+            self,
+            text: str,
+            attach_classes: str = None
+    ):
+        if attach_classes is None:
+            attach_classes = "fancy-text"
+
+        return html.Div(text, className=attach_classes)
+
+class LinearAlgebraSection(Section):
+    title: str = "Linear Algebra"
 
     def section_header(
             self,

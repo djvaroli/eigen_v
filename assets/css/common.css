@@ -13,3 +13,28 @@
   border-radius: 5px;
   box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px
 }
+
+.sub-section-header {
+  background-color: #fbbb85;
+  color: #fff;
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px
+}
+
+.fancy-text {
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+}
+
+.fancy-button{
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.fancy-button:hover {
+  border-color: #e3506f;
+  color: #e3506f;
+  transition: 0.2s;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
