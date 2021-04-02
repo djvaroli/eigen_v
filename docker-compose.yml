@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  eigenvo:
+    build:
+      context: .
+    image: eigenvo:$VERSION
+    container_name: eigenvo
+    ports:
+      - 80:$PORT
+    environment:
+      - TARGET=$TARGET
+      - HOST=$HOST
+      - PORT=$PORT
+      - DEBUG=$DEBUG
+    restart: unless-stopped

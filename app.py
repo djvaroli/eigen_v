@@ -1,4 +1,5 @@
 from typing import *
+import os
 
 import dash
 import dash_core_components as dcc
@@ -15,6 +16,9 @@ from numpy import linalg
 from sections import *
 import data_utils
 
+DEBUG = bool(int(os.environ.get("DEBUG", 0)))
+PORT = os.environ.get("PORT", "8050")
+HOST = os.environ.get("HOST", "127.0.0.1")
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -68,4 +72,7 @@ def p_vs_norm_plot(n_clicks, vector_as_string: str, p_range_as_string: str):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    print(f"DEBUG set to {DEBUG}")
+    print(f"Running on HOST {HOST}")
+    print(f"Running on port {PORT}")
+    app.run_server(host=HOST, debug=DEBUG, port=PORT)
