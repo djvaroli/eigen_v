@@ -3,11 +3,12 @@
   position: relative;
   width: 75%;
   margin: 0 auto;
+  color: #204765;
 }
 
 .section-header {
-  background-color: #66CDAA;
-  color: #204765;
+  background-color: #e3506f;
+  color: #fff;
   padding: 4rem;
   border-radius: 5px;
   box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px

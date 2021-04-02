@@ -65,7 +65,7 @@ def p_vs_norm_plot(n_clicks, vector_as_string: str, p_range_as_string: str):
         x_data = p_values
         y_data = norms
 
-    fig = go.Figure(data=go.Scatter(x=x_data, y=y_data))
+    fig = go.Figure(data=go.Scatter(x=x_data, y=y_data, line=dict(color="#e3506f")))
     fig.update_layout(
         title="Plot of p vs Lp Norm",
         xaxis_title="Value of p",
@@ -90,16 +90,12 @@ def p_isoline_plot(n_clicks, p):
     r = np.power(np.abs(xx), p) + np.power(np.abs(yy), p)
 
     fig = go.Figure()
-    for i, z in enumerate(z_slices):
-        idx = np.where(np.isclose(r, z, rtol=1e-02))
-        i = np.random.choice(range(idx[0].shape[0]), size=1500, replace=True)
-        idx = (idx[0][i], idx[1][i])
-        fig.add_trace(go.Scatter(x=xx[idx], y=yy[idx], mode='markers', name=f'r={z:.2f}'))
+    fig.add_trace(go.Contour(z=r, x=x, y=y, colorscale="sunsetdark"))
 
     fig.update_layout(
         title=f"Iso-lines for p = {p} in 2D.",
-        xaxis_title=r"$\x_0",
-        yaxis_title=r"$\x_1"
+        xaxis_title=r"x_0",
+        yaxis_title=r"x_1"
     )
 
     return fig
