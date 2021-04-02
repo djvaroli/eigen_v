@@ -3,6 +3,7 @@ from typing import *
 from pydantic import BaseModel, root_validator
 import dash_core_components as dcc
 import dash_html_components as html
+from dash_html_components import Br
 
 
 class Section(BaseModel):
@@ -50,3 +51,22 @@ class LpNormSection(Section):
 
         slider = dcc.Slider(id=id, min=min, max=max, value=value, marks=marks, step=step)
         return slider
+
+    def get_dash_layout(
+            self,
+    ) -> List:
+        layout = [
+            self.section_header(),
+            html.Div(["Input a vector: ", dcc.Input(id='vector-input', value="(2, 2)", type='text')]),
+            Br(),
+            html.Div(["Input range of p: ", dcc.Input(id='p-range-input', value="(-2, 2)", type='text')]),
+            Br(),
+            html.Button(id='submit-button-state', n_clicks=0, children='Plot norms!'),
+            Br(),
+            Br(),
+            self.graph("p-vs-norm-plot"),
+            Br(),
+            self.graph("p-isolines-plot")
+        ]
+
+        return layout

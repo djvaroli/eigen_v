@@ -4,7 +4,6 @@ import os
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash_html_components import Br
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -25,8 +24,6 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 
 section = LpNormSection()
-
-
 layout = [
     section.section_header(),
     html.Div(["Input a vector: ", dcc.Input(id='vector-input', value="(2, 2)", type='text')]),
@@ -37,8 +34,14 @@ layout = [
     Br(),
     Br(),
     section.graph("p-vs-norm-plot"),
+    Br(),
+    html.Div([
+        html.Div(["Input p: ", dcc.Input(id='p-isoline-input', value=2, type='number')]),
+        html.Button(id='p-isoline-submit-button', n_clicks=0, children='Plot isolines!')
+    ]),
+    Br(),
+    section.graph("p-isolines-plot")
 ]
-
 app.layout = html.Div(layout, className="container")
 
 
@@ -68,6 +71,37 @@ def p_vs_norm_plot(n_clicks, vector_as_string: str, p_range_as_string: str):
         xaxis_title="Value of p",
         yaxis_title="Lp Norm"
     )
+    return fig
+
+
+@app.callback(
+    Output(component_id="p-isolines-plot", component_property="figure"),
+    Input(component_id="p-isoline-submit-button", component_property="n_clicks"),
+    State(component_id="p-isoline-input", component_property="value")
+)
+def p_isoline_plot(n_clicks, p):
+    z_slices = [1.0, 3.0, 5.0]
+
+    x = np.linspace(-5, 5, num=500)
+    y = np.linspace(-5, 5, num=500)
+
+    xx, yy = np.meshgrid(x, y)
+
+    r = np.power(np.abs(xx), p) + np.power(np.abs(yy), p)
+
+    fig = go.Figure()
+    for i, z in enumerate(z_slices):
+        idx = np.where(np.isclose(r, z, rtol=1e-02))
+        i = np.random.choice(range(idx[0].shape[0]), size=1500, replace=True)
+        idx = (idx[0][i], idx[1][i])
+        fig.add_trace(go.Scatter(x=xx[idx], y=yy[idx], mode='markers', name=f'r={z:.2f}'))
+
+    fig.update_layout(
+        title=f"Iso-lines for p = {p} in 2D.",
+        xaxis_title=r"$\x_0",
+        yaxis_title=r"$\x_1"
+    )
+
     return fig
 
 
