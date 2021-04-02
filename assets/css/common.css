@@ -1,3 +1,10 @@
+
+.container {
+  position: relative;
+  width: 75%;
+  margin: 0 auto;
+}
+
 .section-header {
   background-color: #66CDAA;
   color: #204765;

@@ -1,54 +1,71 @@
+from typing import *
+
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash_html_components import Br
 import plotly.express as px
-from dash.dependencies import Input, Output
+import plotly.graph_objects as go
+
+from dash.dependencies import Input, Output, State
 import pandas as pd
 import numpy as np
 from numpy import linalg
+
+from sections import *
+import data_utils
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 
-app.layout = html.Div([
-    html.H3("Lp Norms.", className="section-header"),
-    html.Div(["Input: ",
-              dcc.Input(id='vector-input', value='[1, 2]', type='text')]),
-    html.Br(),
-    html.H6("Select a value of p"),
-    dcc.Slider(
-        id='p-slider',
-        min=-2,
-        max=10,
-        value=2,
-        marks={
-            -2: "-2 (min singular value)",
-            1: "1 - L1 Norm",
-            2: "2 - L2 Norm",
-            10: "10"
-        },
-        step=1
-    ),
-    html.Div(id="selected-p-value"),
-    html.Div(id='norm-output'),
-])
+section = LpNormSection()
+
+
+layout = [
+    section.section_header(),
+    html.Div(["Input a vector: ", dcc.Input(id='vector-input', value="(2, 2)", type='text')]),
+    Br(),
+    html.Div(["Input range of p: ", dcc.Input(id='p-range-input', value="(-2, 2)", type='text')]),
+    Br(),
+    html.Button(id='submit-button-state', n_clicks=0, children='Plot norms!'),
+    Br(),
+    Br(),
+    section.graph("p-vs-norm-plot"),
+]
+
+app.layout = html.Div(layout, className="container")
 
 
 @app.callback(
-    Output(component_id='norm-output', component_property='children'),
-    Output(component_id='selected-p-value', component_property='children'),
-    Input(component_id='vector-input', component_property='value'),
-    Input(component_id='p-slider', component_property='value')
+    Output(component_id="p-vs-norm-plot", component_property="figure"),
+    Input(component_id="submit-button-state", component_property="n_clicks"),
+    State(component_id="vector-input", component_property="value"),
+    State(component_id="p-range-input", component_property="value"),
 )
-def update_output_div(vector_string, p):
-    
-    vector = vector_string.replace("[", "").replace("]", "").strip()
-    vector = vector.split(",")
-    vector = np.array(vector).astype(np.int32)
-    norm = linalg.norm(vector, ord=p)
-    return f"L2 Norm: {norm: .4f}", f"p: {p}"
+def p_vs_norm_plot(n_clicks, vector_as_string: str, p_range_as_string: str):
+    vector = data_utils.string_to_numpy(vector_as_string)
+    p_values = data_utils.string_to_range(p_range_as_string, return_list=True)
+
+    if vector is None or p_values is None:
+        x_data = [0]
+        y_data = [0]
+    else:
+        norms = np.zeros(len(p_values))
+        for i, p in enumerate(p_values):
+            norms[i] = linalg.norm(vector, ord=p)
+        x_data = p_values
+        y_data = norms
+
+    fig = go.Figure(data=go.Scatter(x=x_data, y=y_data))
+    fig.update_layout(
+        title="Plot of p vs Lp Norm",
+        xaxis_title="Value of p",
+        yaxis_title="Lp Norm"
+    )
+    return fig
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
