@@ -9,7 +9,7 @@
 .section-header {
   background-color: #e3506f;
   color: #fff;
-  padding: 4rem;
+  padding: 2rem;
   border-radius: 5px;
   box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px
 }
@@ -17,7 +17,7 @@
 .sub-section-header {
   background-color: #fbbb85;
   color: #fff;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 5px;
   box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px
 }
@@ -33,8 +33,9 @@
 }
 
 .fancy-button:hover {
-  border-color: #e3506f;
-  color: #e3506f;
-  transition: 0.2s;
+  /*border-color: #e3506f;*/
+  background-color: #e3506f;
+  color: #fff;
+  transition: 0.1s;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }

@@ -2,65 +2,24 @@ import os
 
 import dash
 import plotly.graph_objects as go
-
 from dash.dependencies import Input, Output, State
 import numpy as np
+import dash_bootstrap_components as dbc
 from numpy import linalg
 
 from sections import *
 import data_utils
 
-DEBUG = bool(int(os.environ.get("DEBUG", 0)))
+
+DEBUG = bool(int(os.environ.get("DEBUG", 1)))
 PORT = os.environ.get("PORT", "8050")
 HOST = os.environ.get("HOST", "127.0.0.1")
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 section = LinearAlgebraSection()
-layout = [
-    section.section_header(),
-    section.text_block(text="One topic that I come up against almost daily is Linear Algebra. That shouldn't be a surprise,"
-                            " since so many things in machine learning and statistics (and other areas) are tightly connected to"
-                            "linear algebra. Sometimes it feels overwhelming realizing, just how much you don't know. "
-                            "I've decided that to strengthen my understanding (not just knowledge) of linear algebra concepts, "
-                            "I will create small visualizations that will hopefully help me (and maybe others) get a more intuitive"
-                            "understanding of some of these concepts that I struggle with. "),
-    Br(),
-    section.sub_section_header("Lp Norms"),
-    Br(),
-    Br(),
-    html.Div(["Input a vector: ", dcc.Input(id='vector-input', value="(2, 2)", type='text')]),
-    Br(),
-    html.Div(["Input range of p: ", dcc.Input(id='p-range-input', value="(-2, 2)", type='text')]),
-    Br(),
-    html.Button(id='submit-button-state', n_clicks=0, children='Plot norms', className="fancy-button"),
-    Br(),
-    Br(),
-    section.graph("p-vs-norm-plot"),
-    Br(),
-    section.text_block("After making these plots and playing around with the ranges of values of p I noticed some "
-                       "interesting and unexpected observations.\n"
-                       "The first thing that really stuck out was that as we increase p, in other words as p approaches"
-                       " +inf the value of the Lp norm seems to converge to a finite number. What is even more interesting,"
-                       "as I found out, is that if you play around with the values of the components of the input vector,"
-                       "you will see that as p -> +inf the norm converges to the scalar equal to the largest component of "
-                       "the input vector. As I found out this even has a name, the Chebyshev norm."),
-    Br(),
-    section.sub_section_header("Norm Iso-contours"),
-    Br(),
-    html.Div(["Input p: ", dcc.Input(id='p-isoline-input', value=2, type='number')]),
-    Br(),
-    html.Button(id='p-isoline-submit-button', n_clicks=0, children='Plot iso-contours', className="fancy-button"),
-    Br(),
-    Br(),
-    section.graph("p-isolines-plot"),
-    Br(),
-    section.text_block("That looks so cool! I've seen such plots many times, but never quite understood how they are made."
-                       "It actually wasn't that hard to recreate and I actually think I now better understand what the different"
-                       "p norms 'look like' outside of their mathematical definition. ")
-]
+layout = section.build_layout()
+
 app.layout = html.Div(layout, className="container")
 
 
