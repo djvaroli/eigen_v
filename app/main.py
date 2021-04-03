@@ -1,25 +1,27 @@
+import logging
 import os
 
-import dash
-import plotly.graph_objects as go
-from dash.dependencies import Input, Output, State
 import numpy as np
-import dash_bootstrap_components as dbc
 from numpy import linalg
+from dash.dependencies import Input, Output, State
+import plotly.graph_objects as go
+import dash_html_components as html
 
-from sections import *
-import data_utils
+from utils import data_utils
+from sections.LinearAlgebraSection import LinearAlgebraSection
+from app_factory import get_app
 
-
-DEBUG = bool(int(os.environ.get("DEBUG", 1)))
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "production")
 PORT = os.environ.get("PORT", "8050")
-HOST = os.environ.get("HOST", "127.0.0.1")
+HOST = os.environ.get("HOST", "0.0.0.0")
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+logger = logging.getLogger("eigenvo-main.py")
+logger.setLevel(logging.INFO)
 
 section = LinearAlgebraSection()
 layout = section.build_layout()
 
+app, server = get_app()
 app.layout = html.Div(layout, className="container")
 
 
@@ -58,8 +60,6 @@ def p_vs_norm_plot(n_clicks, vector_as_string: str, p_range_as_string: str):
     State(component_id="p-isoline-input", component_property="value")
 )
 def p_isoline_plot(n_clicks, p):
-    z_slices = [1.0, 3.0, 5.0]
-
     x = np.linspace(-5, 5, num=500)
     y = np.linspace(-5, 5, num=500)
 
@@ -80,7 +80,10 @@ def p_isoline_plot(n_clicks, p):
 
 
 if __name__ == '__main__':
-    print(f"DEBUG set to {DEBUG}")
-    print(f"Running on HOST {HOST}")
-    print(f"Running on port {PORT}")
-    app.run_server(host=HOST, debug=DEBUG, port=PORT)
+    debug = True
+    if ENVIRONMENT == "production":
+        debug = False
+
+    logger.info(f"Running in {ENVIRONMENT}")
+    logger.info(f"Running on host {HOST} @ port {PORT}, ")
+    app.run_server(host=HOST, debug=debug, port=PORT)
