@@ -1,10 +1,10 @@
 from typing import *
 
-from pydantic import BaseModel, root_validator
 import dash_core_components as dcc
 import dash_html_components as html
-from dash_html_components import Br
 import dash_bootstrap_components as dbc
+
+from sections.BaseSection import BaseSection
 
 linear_algebra_intro_text = """One topic that I come up against almost daily is Linear Algebra. That shouldn't be a surprise,"
 " since so many things in machine learning and statistics (and other areas) are tightly connected to"
@@ -26,66 +26,7 @@ isocontours_text = """That looks so cool! I've seen such plots many times, but n
 "p norms 'look like' outside of their mathematical definition. """
 
 
-class Section(BaseModel):
-    title: str
-    name: str = None
-
-    @staticmethod
-    def graph(
-            graph_id: str,
-            attach_classes: str = ""
-    ):
-        attach_classes_list: list = attach_classes.strip().split(" ")
-        attach_classes_list.append("fancy-plot")
-        attach_classes = " ".join(attach_classes_list)
-        return dcc.Graph(id=graph_id, className=attach_classes)
-
-    def sub_section_header(
-            self,
-            sub_section_name: str,
-            attach_classes: str = None
-    ):
-        if attach_classes is None:
-            attach_classes = "sub-section-header"
-        return html.H5(sub_section_name, className=attach_classes)
-
-    def text_block(
-            self,
-            text: str,
-            attach_classes: str = None
-    ):
-        if attach_classes is None:
-            attach_classes = "fancy-text"
-
-        return html.Div(text, className=attach_classes)
-
-    def get_button(
-            self,
-            text: str,
-            id: str,
-            color: str = "light",
-            attach_classes: str = ""
-    ):
-        attach_classes_list: list = attach_classes.strip().split(" ")
-        attach_classes_list.append("fancy-button")
-        attach_classes_list.append("btn")
-        attach_classes_list.append("mr-1")
-        attach_classes = " ".join(attach_classes_list)
-        button = dbc.Button(text, id=id, color=color, className=attach_classes)
-
-        return button
-
-    @staticmethod
-    def get_breaks(
-            n: int = 1
-    ):
-        breaks = []
-        for i in range(n):
-            breaks.append(Br())
-        return breaks
-
-
-class LinearAlgebraSection(Section):
+class LinearAlgebraSection(BaseSection):
     title: str = "Linear Algebra"
 
     def section_header(

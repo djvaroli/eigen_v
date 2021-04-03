@@ -2,8 +2,7 @@ FROM python:3.8
 
 COPY ./app ./app
 WORKDIR ./app
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-EXPOSE $PORT
-
-CMD ["python", "./main.py"]
+CMD ["gunicorn", "main:server", "-b 0.0.0.0:8050"]
