@@ -1,21 +1,16 @@
-from typing import *
 import os
 
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
-import plotly.express as px
 import plotly.graph_objects as go
 
 from dash.dependencies import Input, Output, State
-import pandas as pd
 import numpy as np
 from numpy import linalg
 
 from sections import *
 import data_utils
 
-DEBUG = bool(int(os.environ.get("DEBUG", 1)))
+DEBUG = bool(int(os.environ.get("DEBUG", 0)))
 PORT = os.environ.get("PORT", "8050")
 HOST = os.environ.get("HOST", "127.0.0.1")
 
