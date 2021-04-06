@@ -16,9 +16,8 @@ and for topics I find particularly interesting or challenging I will try to some
 Gradually, I aim to build up a library of topics from mathematics that I, or anyone else,
 can look at, play around with and hopefully improve their understanding of the underlying concepts.
 
-(I am currently working on setting up automatic build and deploy with the 
-GCP Container Registry and once that's done this playground should be accessible at 
-[eigenvo.com](eigenvo.com))
+This site is no running via Google Cloud Run and can be accessed at [eigenvo.com](eigenvo.com)).
+It's a bit slow at the moment, but I am working on speeding that up while keeping my costs low :)
 
 
 ### Running locally
