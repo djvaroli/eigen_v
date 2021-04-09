@@ -1,0 +1,24 @@
+.home-header {
+    box-shadow: rgb(76 24 136) 0px 1px 4px;
+    padding: 2rem;
+    border-radius: 5px;
+}
+
+.home-live-sections {
+    box-shadow: rgb(76 24 136) 0px 1px 4px;
+    padding: 2rem;
+    border-radius: 5px;
+}
+
+.home-section-link {
+    font-size: 2rem;
+    color: #4c1889ab;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.home-section-link:hover {
+    text-decoration: none;
+    transition: 0.5s;
+    color: #4C1889;
+}

@@ -8,6 +8,7 @@ from utils import decorators
 
 class PageNotFoundComponent(BaseComponent):
     title = "Page Not Found (404... Sorry!)"
+    icon_url: str = "/assets/images/404.png"
 
     @decorators.use_default_classes("center m-5")
     def layout(
@@ -19,7 +20,10 @@ class PageNotFoundComponent(BaseComponent):
     ):
         default_classes = kwargs.pop("default_classes", [])
         classes_to_attach = self.make_classes(classes_to_attach, default_classes)
-        layout = html.H1(self.title)
+        layout = [
+            html.H1(self.title),
+            html.Img(src=self.icon_url)
+        ]
         if make_dash_component:
             layout = html.Div(layout, className=classes_to_attach)
 

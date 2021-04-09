@@ -12,9 +12,6 @@ class NavBarComponent(BaseComponent):
             current_section_url: str,
             make_dash_component: bool = True,
     ):
-        if current_section_url == "home":
-            current_section_name = "Home"
-
         current_section_blob = url_component_map.get(current_section_url)
         if current_section_blob is None:
             current_section_name = "404"
@@ -23,9 +20,10 @@ class NavBarComponent(BaseComponent):
 
         children = [
             dbc.DropdownMenuItem(section['name'], href=f"/{section_url}") for
-            section_url, section in url_component_map.items()
+            section_url, section in url_component_map.items() if section_url not in ["home", ""]
         ]
 
+        label = current_section_name if current_section_name.lower() not in ["404", "home"] else "Select section..."
         layout = dbc.NavbarSimple(
             children=[
                 dbc.NavItem(dbc.NavLink("", href="#")),
@@ -33,7 +31,7 @@ class NavBarComponent(BaseComponent):
                     children=children,
                     nav=True,
                     in_navbar=True,
-                    label=current_section_name,
+                    label=label,
                     className="navbar-dropdown"
                 ),
             ],

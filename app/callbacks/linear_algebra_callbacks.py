@@ -19,21 +19,20 @@ from assets.data.covid_data import COVID_DATA_DF
     Input(component_id="p-vs-norm-range-slider", component_property="value"),
 )
 def p_vs_norm_plot(vector_as_string: str, p_values: list):
-    try:
-        vector = data_utils.string_to_numpy(vector_as_string)
-        p_values = list(range(p_values[0], p_values[-1]))
+    vector = data_utils.string_to_numpy(vector_as_string)
+    p_values = list(range(p_values[0], p_values[-1]))
+    if not vector:
+        vector = np.array([1])
 
-        if vector is None or p_values is None:
-            x_data = [0]
-            y_data = [0]
-        else:
-            norms = np.zeros(len(p_values))
-            for i, p in enumerate(p_values):
-                norms[i] = linalg.norm(vector, ord=p)
-            x_data = p_values
-            y_data = norms
-    except Exception as e:
-        raise PreventUpdate
+    if vector is None or p_values is None:
+        x_data = [0]
+        y_data = [0]
+    else:
+        norms = np.zeros(len(p_values))
+        for i, p in enumerate(p_values):
+            norms[i] = linalg.norm(vector, ord=p)
+        x_data = p_values
+        y_data = norms
 
     fig = go.Figure(data=go.Scatter(x=x_data, y=y_data, line=dict(color="#e3506f")))
     fig.update_layout(
@@ -50,7 +49,7 @@ def p_vs_norm_plot(vector_as_string: str, p_values: list):
 )
 def p_isoline_plot(p):
     if not p:
-        raise PreventUpdate
+        p = 1
 
     x = np.linspace(-5, 5, num=500)
     y = np.linspace(-5, 5, num=500)
@@ -89,8 +88,8 @@ def covid_data_day_vs_region(region: str):
     Input("kind-value-selector", "value")
 )
 def covid_data_poly_fit(region: str, degree: int, kind: str):
-    if not degree or not kind or not region:
-        raise PreventUpdate
+    if not degree:
+        degree = 2
 
     alphas = ["0", "1", "100", "1000", "5000", "10000"]
     alphas = [float(a) for a in alphas]
