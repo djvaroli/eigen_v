@@ -76,7 +76,7 @@ def p_isoline_plot(p):
     Input(component_id="covid-data-region-selector", component_property="value")
 )
 def covid_data_day_vs_region(region: str):
-    title = f"March 2020 Covid cases by day in {region}"
+    title = f"March 2020 Covid cases by day in {region} region"
     fig = px.scatter(COVID_DATA_DF, x="days", y=region, title=title)
 
     return fig
@@ -85,15 +85,14 @@ def covid_data_day_vs_region(region: str):
     Output("covid-poly-fit-plot", "figure"),
     Input("covid-data-region-selector", "value"),
     Input("poly-degree-input", "value"),
-    Input("alpha-range-slider", "value"),
+    # Input("alpha-range-slider", "value"),
     Input("kind-value-selector", "value")
 )
-def covid_data_poly_fit(region: str, degree: int, alphas, kind: str):
-    if not isinstance(degree, int):
+def covid_data_poly_fit(region: str, degree: int, kind: str):
+    if not degree or not kind or not region:
         raise PreventUpdate
-    print(alphas)
 
-    alphas = alphas.strip().split(",")
+    alphas = ["0", "1", "100", "1000", "5000", "10000"]
     alphas = [float(a) for a in alphas]
 
     # keep the untransformed values for future use
@@ -151,7 +150,7 @@ def covid_data_poly_fit(region: str, degree: int, alphas, kind: str):
 
     fig.update_layout(
         height=1200,
-        title_text=f"Polynomial fitting with {kind} regression.",
+        title_text=f"Degree {degree} Polynomial Features with {kind} regression.",
         showlegend=False
     )
 

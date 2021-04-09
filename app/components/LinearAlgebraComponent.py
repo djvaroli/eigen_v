@@ -90,7 +90,7 @@ class LinearAlgebraComponent(BaseComponent):
             min: int = 0,
             max: int = 5000,
             value: List[int] = None,
-            step: int = 1,
+            step: Optional[Union[int, None]] = None,
             marks: Dict[int, str] = None,
             tooltip: Dict = None,
             *args,
@@ -98,30 +98,33 @@ class LinearAlgebraComponent(BaseComponent):
     ) -> dcc.RangeSlider:
         if marks is None:
             marks = {
-                0: "alpha = 0",
-                100: "alpha = 100"
+                0: "0",
+                10: "10",
+                100: "100",
+                1000: "alpha = 1000",
+                10000: "alpha = 5"
             }
 
-            if value is None:
-                value = [0, 100]
+        if value is None:
+            value = [0, 100]
 
-            if tooltip is None:
-                tooltip = {
-                    "placement": "right"
-                }
+        if tooltip is None:
+            tooltip = {
+                "placement": "right"
+            }
 
-            slider = dcc.RangeSlider(
-                id=id,
-                min=min,
-                max=max,
-                value=value,
-                marks=marks,
-                step=step,
-                tooltip=tooltip,
-                *args,
-                **kwargs
-            )
-            return slider
+        slider = dcc.RangeSlider(
+            id=id,
+            min=min,
+            max=max,
+            value=value,
+            marks=marks,
+            step=step,
+            tooltip=tooltip,
+            *args,
+            **kwargs
+        )
+        return slider
 
     def vector_input_form_group(
             self,
@@ -184,7 +187,10 @@ class LinearAlgebraComponent(BaseComponent):
             *args,
             **kwargs
     ):
-        options = [{"label": r, "value": r.lower()} for r in ['Lasso regression', "Ridge regression"]]
+        labels = ['Lasso regression', "Ridge regression"]
+        values = ["lasso", "ridge"]
+
+        options = [{"label": r[0], "value": r[-1]} for r in zip(labels, values)]
         return self.dropdown_select(
             id,
             value="lasso",
@@ -235,12 +241,11 @@ class LinearAlgebraComponent(BaseComponent):
             *self.text_block(isocontours_text),
             *self.sub_section_header("Application in Regularization"),
             *self.text_block(regularization_intro_text),
-            *self.covid_data_region_select("covid-data-region-selector"),
-            *self.figure("covid-data-scatter"),
             *self.text_block(regularization_post_covid_scatter_text),
+            *self.figure("covid-data-scatter"),
+            *self.covid_data_region_select("covid-data-region-selector"),
             *self.get_regression_type_selector("kind-value-selector"),
             *self.get_polynomial_degree_input("poly-degree-input"),
-            *self.alpha_value_range_slider("alpha-range-slider"),
             *self.figure("covid-poly-fit-plot")
         ]
 
