@@ -1,17 +1,17 @@
 import dash_bootstrap_components as dbc
 
 from components.BaseComponent import BaseComponent
-from components import LinearAlgebraComponent
+from components import LinearAlgebraComponent, HomeComponent
 
 url_section_map = {
     "linear_algebra": {
         "component": LinearAlgebraComponent.LinearAlgebraComponent(),
         "name": "Linear Algebra"
     },
-    # "ml_clustering": {
-    #     "component": "",
-    #     "name": "Machine Learning: Clustering"
-    # }
+    "home": {
+        "component": HomeComponent.HomeComponent(),
+        "name": "Home"
+    }
 }
 
 

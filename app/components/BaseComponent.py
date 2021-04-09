@@ -45,6 +45,19 @@ class BaseComponent(BaseModel):
         classes_to_attach = self.make_classes(classes_to_attach, default_classes)
         return dcc.Graph(id=graph_id, className=classes_to_attach, *args, **kwargs)
 
+    @decorators.use_default_classes(default_classes="fancy-image")
+    @decorators.wrap_component_with_breaks()
+    def image(
+            self,
+            image_url: str,
+            classes_to_attach: List[str] = None,
+            *args,
+            **kwargs
+    ):
+        default_classes = kwargs.pop("default_classes", [])
+        classes_to_attach = self.make_classes(classes_to_attach, default_classes)
+        return html.Img(src=image_url, className=classes_to_attach)
+
     @decorators.use_default_classes(default_classes="section-header")
     @decorators.wrap_component_with_breaks()
     def section_header(

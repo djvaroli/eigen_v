@@ -5,13 +5,18 @@ import dash_html_components as html
 
 from components.BaseComponent import BaseComponent
 from assets.data.covid_data import COVID_DATA_DF
-
+from app_factory import app
 
 linear_algebra_intro_text = """One topic that I come up against almost daily is Linear Algebra. When I took my first 
 linear algebra course I thought it was easy. Very soon after that I realized there was much more to linear algebra than 
 what I knew. To this day I find this topic fascinating but so so challenging. In this section I will explore some 
 concepts that I find most interesting, most challenging or both!"""
 
+
+norm_intro_text = """So what is an Lp norm? Well, you are probably familiar with the L1 and L2 norms, also known as 
+the Manhattan Distance and the Eucledian norm. The l1 norm is the sum of the components of a vector, where as the L2 norm 
+is the Euclidian distance between two vectors. More formally an Lp norm is defined by the equation a bit below. Below that 
+you will find a small interactive graph where you can see how p affects the norm of a vector (that you get to specify)!"""
 
 norm_observation_text = """If you play around with the slider you will notice something I found very interesting. First, 
 as the value of p increases the Lp norm approaches a seemingly finite number. This is not any random number, but 
@@ -30,15 +35,17 @@ at the applications in regularization."""
 regularization_intro_text = """While all of this is very cool to look at on its own, we don't have to limit ourselves
 to just some nice plots and shapes. Norms play an important role in machine learning when it comes to obtaining models
 that generalize better and don't overfit the training data. This is called regularization and it is done by adding 
-a penalty term equal to the some p-norm of the weights of our parameter vector. Usually p here is 1 (Lasso regression) 
-or 2 (Ridge regression). Let's explore how those two (and others) impact performance of a machine learning model. For
-this exercise I will go with the COVID cases data (because that's the hot topic now) provided in the book."""
+a penalty term equal to the some p-norm (usually 1 or 2) of the weights of our parameter vector. The cases where we use 
+ the L1 and L2 norms are also called Lasso and Ridge regression respectively. Let's explore how those two 
+ impact performance of a machine learning model. For this exercise I will go with the COVID cases data 
+ (because that's the hot topic now) provided in the book."""
 
 regularization_post_covid_scatter_text = """Looking at the scatter plots, we see that cases are not going up in a linear
-fashion, so for this case (again, following the book) we will use polynomial feature regression to fit the apparent 
-non-linear relationship. I just want to note that this is really done for the purpose of an exercise rather than to 
-predict anything.\n The plot below will let you experiment with different values of the regularization parameters 
-(alpha) and look at the difference between Lasso(L1) and Ridge(L2) regression."""
+fashion, so we will transform our features into some polynomial space and then fit our regression model to those 
+transformed features to approximate the non-linear relationship. I just want to note that this is really done for 
+as a demonstration you probably would do something very different if you were trying to make any predictions.\n 
+The plot below will let you try out different degrees of the polynomial transformations as well as chose between the two 
+regularization methods"""
 
 
 class LinearAlgebraComponent(BaseComponent):
@@ -230,6 +237,8 @@ class LinearAlgebraComponent(BaseComponent):
         layout = [
             *self.text_block(text=linear_algebra_intro_text),
             *self.sub_section_header("Lp Norms"),
+            *self.text_block(norm_intro_text),
+            *self.image(app.get_asset_url("images/lp_norm_equation.png")),
             *self.vector_input_form_group("p-vs-norm-vector-input"),
             self.p_value_range_slider("p-vs-norm-range-slider"),
             *self.figure("p-vs-norm-plot"),
