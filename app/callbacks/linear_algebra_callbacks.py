@@ -21,7 +21,7 @@ from assets.data.covid_data import COVID_DATA_DF
 def p_vs_norm_plot(vector_as_string: str, p_values: list):
     vector = data_utils.string_to_numpy(vector_as_string)
     p_values = list(range(p_values[0], p_values[-1]))
-    if not vector:
+    if vector is None:
         vector = np.array([1])
 
     if vector is None or p_values is None:

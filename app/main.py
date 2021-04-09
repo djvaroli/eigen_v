@@ -5,7 +5,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 
-from app_factory import app
+from app_factory import app, server
 from components import PageNotFoundComponent, NavBarComponent
 from components import url_component_map
 from callbacks import linear_algebra_callbacks
