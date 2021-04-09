@@ -8,7 +8,7 @@ logger.setLevel(logging.INFO)
 
 
 def get_app():
-    application = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO])
+    application = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO], title="EigenVo")
     application_server = application.server
     application.config.suppress_callback_exceptions = True
 
