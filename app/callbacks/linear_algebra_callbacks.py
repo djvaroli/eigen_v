@@ -1,6 +1,7 @@
 import numpy as np
 from numpy import linalg
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import plotly.express as px
@@ -14,23 +15,25 @@ from assets.data.covid_data import COVID_DATA_DF
 
 @app.callback(
     Output(component_id="p-vs-norm-plot", component_property="figure"),
-    Input(component_id="update-p-vs-norm-inputs-button", component_property="n_clicks"),
-    State(component_id="p-vs-norm-vector-input", component_property="value"),
-    State(component_id="p-vs-norm-range-slider", component_property="value"),
+    Input(component_id="p-vs-norm-vector-input", component_property="value"),
+    Input(component_id="p-vs-norm-range-slider", component_property="value"),
 )
-def p_vs_norm_plot(n_clicks, vector_as_string: str, p_values: list):
-    vector = data_utils.string_to_numpy(vector_as_string)
-    p_values = list(range(p_values[0], p_values[-1]))
+def p_vs_norm_plot(vector_as_string: str, p_values: list):
+    try:
+        vector = data_utils.string_to_numpy(vector_as_string)
+        p_values = list(range(p_values[0], p_values[-1]))
 
-    if vector is None or p_values is None:
-        x_data = [0]
-        y_data = [0]
-    else:
-        norms = np.zeros(len(p_values))
-        for i, p in enumerate(p_values):
-            norms[i] = linalg.norm(vector, ord=p)
-        x_data = p_values
-        y_data = norms
+        if vector is None or p_values is None:
+            x_data = [0]
+            y_data = [0]
+        else:
+            norms = np.zeros(len(p_values))
+            for i, p in enumerate(p_values):
+                norms[i] = linalg.norm(vector, ord=p)
+            x_data = p_values
+            y_data = norms
+    except Exception as e:
+        raise PreventUpdate
 
     fig = go.Figure(data=go.Scatter(x=x_data, y=y_data, line=dict(color="#e3506f")))
     fig.update_layout(
@@ -43,10 +46,12 @@ def p_vs_norm_plot(n_clicks, vector_as_string: str, p_values: list):
 
 @app.callback(
     Output(component_id="p-isolines-plot", component_property="figure"),
-    Input(component_id="p-isoline-submit-button", component_property="n_clicks"),
-    State(component_id="p-isoline-input", component_property="value")
+    Input(component_id="p-isoline-input", component_property="value")
 )
-def p_isoline_plot(n_clicks, p):
+def p_isoline_plot(p):
+    if not p:
+        raise PreventUpdate
+
     x = np.linspace(-5, 5, num=500)
     y = np.linspace(-5, 5, num=500)
 
@@ -55,7 +60,7 @@ def p_isoline_plot(n_clicks, p):
     r = np.power(np.abs(xx), p) + np.power(np.abs(yy), p)
 
     fig = go.Figure()
-    fig.add_trace(go.Contour(z=r, x=x, y=y, colorscale="sunsetdark"))
+    fig.add_trace(go.Contour(z=r, x=x, y=y, colorscale="purples"))
 
     fig.update_layout(
         title=f"Iso-lines for p = {p} in 2D.",
@@ -84,6 +89,9 @@ def covid_data_day_vs_region(region: str):
     Input("kind-value-selector", "value")
 )
 def covid_data_poly_fit(region: str, degree: int, kind: str):
+    if not isinstance(degree, int):
+        raise PreventUpdate
+
     alphas = "0, 1, 10, 100, 1000, 10000"
     alphas = alphas.strip().split(",")
     alphas = [float(a) for a in alphas]

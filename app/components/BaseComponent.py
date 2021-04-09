@@ -139,18 +139,23 @@ class BaseComponent(BaseModel):
     @decorators.wrap_component_with_breaks()
     def input_form_group(
             id: str,
-            label_text: str,
             type: str,
-            initial_value,
+            label_text: str = None,
+            initial_value = None,
             row: bool = True,
             label_width: int = 2,
             input_width: int = 2,
             *args,
             **kwargs
     ):
+        if label_text is None:
+            label_ = []
+        else:
+            label_ = [dbc.Label(label_text, width=label_width)]
+
         f = dbc.FormGroup(
             [
-                dbc.Label(label_text, width=label_width),
+                *label_,
                 dbc.Col(
                     dbc.Input(
                         id=id,

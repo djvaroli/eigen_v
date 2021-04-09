@@ -1,4 +1,8 @@
 
+body {
+  font-size: 18px;
+}
+
 .container {
   position: relative;
   width: 75%;
@@ -15,10 +19,11 @@
 }
 
 .sub-section-header {
-  background-color: #fbbb85;
+  background-color: #827fbb;
   color: #fff;
   padding: 1rem;
   border-radius: 5px;
+  font-size: 1.6rem;
   box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px
 }
 

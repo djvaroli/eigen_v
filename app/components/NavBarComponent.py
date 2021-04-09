@@ -7,7 +7,11 @@ url_section_map = {
     "linear_algebra": {
         "component": LinearAlgebraComponent.LinearAlgebraComponent(),
         "name": "Linear Algebra"
-    }
+    },
+    # "ml_clustering": {
+    #     "component": "",
+    #     "name": "Machine Learning: Clustering"
+    # }
 }
 
 
@@ -38,9 +42,10 @@ class NavBarComponent(BaseComponent):
                     nav=True,
                     in_navbar=True,
                     label=current_section_name,
+                    className="navbar-dropdown"
                 ),
             ],
-            brand=f"EigenVo",
+            brand=f"EigenVo | {current_section_name}",
             brand_href="/home",
             color="info",
             dark=True,

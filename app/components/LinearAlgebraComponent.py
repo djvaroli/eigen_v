@@ -7,12 +7,10 @@ from components.BaseComponent import BaseComponent
 from assets.data.covid_data import COVID_DATA_DF
 
 
-linear_algebra_intro_text = """One topic that I come up against almost daily is Linear Algebra. That shouldn't be a surprise,"
-" since so many things in machine learning and statistics (and other areas) are tightly connected to"
-"linear algebra. Sometimes it feels overwhelming realizing, just how much you don't know. "
-"I've decided that to strengthen my understanding (not just knowledge) of linear algebra concepts, "
-"I will create small visualizations that will hopefully help me (and maybe others) get a more intuitive"
-"understanding of some of these concepts that I struggle with."""
+linear_algebra_intro_text = """One topic that I come up against almost daily is Linear Algebra. When I took my first 
+linear algebra course I thought it was easy. Very soon after that I realized there was much more to linear algebra than 
+what I knew. To this day I find this topic fascinating but so so challenging. In this section I will explore some 
+concepts that I find most interesting, most challenging or both!"""
 
 norm_observation_text = """After making these plots and playing around with the ranges of values of p I noticed some "
 "interesting and unexpected observations.\n"
@@ -82,23 +80,39 @@ class LinearAlgebraComponent(BaseComponent):
     def vector_input_form_group(
             self,
             id: str,
-            label_text: str = "Input a vector",
             type: str = "text",
-            label_width: int = 2,
-            input_width: int = 2,
+            input_width: int = 4,
             row: bool = True,
-            initial_value: str = "(2, 2)",
+            placeholder: str = "2D Vector goes here. Try (2,2)",
             *args,
             **kwargs
     ):
         return self.input_form_group(
             id=id,
-            label_text=label_text,
             type=type,
-            label_width=label_width,
             input_width=input_width,
             row=row,
-            initial_value=initial_value,
+            placeholder=placeholder,
+            *args,
+            **kwargs
+        )
+
+    def isoline_plot_p_form_group(
+            self,
+            id: str,
+            type: str = "number",
+            input_width: int = 4,
+            row: bool = True,
+            placeholder: str = "Enter a value of P",
+            *args,
+            **kwargs
+    ):
+        return self.input_form_group(
+            id=id,
+            type=type,
+            input_width=input_width,
+            row=row,
+            placeholder=placeholder,
             *args,
             **kwargs
         )
@@ -124,45 +138,52 @@ class LinearAlgebraComponent(BaseComponent):
             *args,
             **kwargs
     ):
-        options = [{"label": r, "value": r.lower()} for r in ['Lasso', "Ridge"]]
+        options = [{"label": r, "value": r.lower()} for r in ['Lasso regression', "Ridge regression"]]
         return self.dropdown_select(
-            id, value="lasso", options=options, classes_to_attach=classes_to_attach, *args, **kwargs
+            id,
+            value="lasso",
+            options=options,
+            classes_to_attach=classes_to_attach,
+            *args,
+            **kwargs
         )
 
     def get_polynomial_degree_input(
             self,
             id: str,
-            label_text: str = "Select polynomial degree (0 - 20)",
-            classes_to_attach: List[str] = None,
+            type: str = "number",
+            input_width: int = 4,
+            row: bool = True,
+            placeholder: str = "Degree of Polynomial Features",
+            *args,
+            **kwargs
     ):
-        c = self.input_form_group(
+        return self.input_form_group(
             id=id,
-            label_text=label_text,
-            type="number",
-            min=0,
-            max=20,
+            type=type,
+            input_width=input_width,
+            row=row,
             step=1,
-            initial_value=5
+            placeholder=placeholder,
+            *args,
+            **kwargs
         )
-
-        return c
 
     def layout(
             self,
-            make_dash_component: bool = False
+            make_dash_component: bool = False,
+            *args,
+            **kwargs
     ):
         layout = [
-            *self.section_header("Linear Algebra"),
             *self.text_block(text=linear_algebra_intro_text),
             *self.sub_section_header("Lp Norms"),
             *self.vector_input_form_group("p-vs-norm-vector-input"),
             self.p_value_range_slider("p-vs-norm-range-slider"),
-            *self.button("Replot Norms", id='update-p-vs-norm-inputs-button'),
             *self.figure("p-vs-norm-plot"),
             *self.text_block(norm_observation_text),
             *self.sub_section_header("Norm Iso-contours"),
-            *self.input_form_group('p-isoline-input', "Input p", "number", initial_value=2),
-            *self.button('Plot iso-contours', id='p-isoline-submit-button'),
+            *self.isoline_plot_p_form_group('p-isoline-input'),
             *self.figure("p-isolines-plot"),
             *self.text_block(isocontours_text),
             *self.sub_section_header("Application in Regularization"),
