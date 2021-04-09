@@ -49,3 +49,7 @@ body {
   color: #204765;
   text-align: center;
 }
+
+.tab-text {
+  background-color: red;
+}

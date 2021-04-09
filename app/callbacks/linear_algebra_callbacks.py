@@ -60,7 +60,7 @@ def p_isoline_plot(p):
     r = np.power(np.abs(xx), p) + np.power(np.abs(yy), p)
 
     fig = go.Figure()
-    fig.add_trace(go.Contour(z=r, x=x, y=y, colorscale="purples"))
+    fig.add_trace(go.Contour(z=r, x=x, y=y, colorscale="PuRd"))
 
     fig.update_layout(
         title=f"Iso-lines for p = {p} in 2D.",
@@ -85,14 +85,14 @@ def covid_data_day_vs_region(region: str):
     Output("covid-poly-fit-plot", "figure"),
     Input("covid-data-region-selector", "value"),
     Input("poly-degree-input", "value"),
-    # Input("alphas-value-input", "value"),
+    Input("alpha-range-slider", "value"),
     Input("kind-value-selector", "value")
 )
-def covid_data_poly_fit(region: str, degree: int, kind: str):
+def covid_data_poly_fit(region: str, degree: int, alphas, kind: str):
     if not isinstance(degree, int):
         raise PreventUpdate
+    print(alphas)
 
-    alphas = "0, 1, 10, 100, 1000, 10000"
     alphas = alphas.strip().split(",")
     alphas = [float(a) for a in alphas]
 

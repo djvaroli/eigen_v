@@ -12,17 +12,20 @@ linear algebra course I thought it was easy. Very soon after that I realized the
 what I knew. To this day I find this topic fascinating but so so challenging. In this section I will explore some 
 concepts that I find most interesting, most challenging or both!"""
 
-norm_observation_text = """After making these plots and playing around with the ranges of values of p I noticed some "
-"interesting and unexpected observations.\n"
-"The first thing that really stuck out was that as we increase p, in other words as p approaches"
-" +inf the value of the Lp norm seems to converge to a finite number. What is even more interesting,"
-"as I found out, is that if you play around with the values of the components of the input vector,"
-"you will see that as p -> +inf the norm converges to the scalar equal to the largest component of "
-"the input vector. As I found out this even has a name, the Chebyshev norm."""
 
-isocontours_text = """That looks so cool! I've seen such plots many times, but never quite understood how they are made."
-"It actually wasn't that hard to recreate and I actually think I now better understand what the different"
-"p norms 'look like' outside of their mathematical definition. """
+norm_observation_text = """If you play around with the slider you will notice something I found very interesting. First, 
+as the value of p increases the Lp norm approaches a seemingly finite number. This is not any random number, but 
+the value of the largest component of the input vector. It was important enough to get its own name - Chebyshev Norm"""
+
+norm_isocontours_intro = """Norm isocontours are something I couldn't really grasp conceptually at all, until I tried
+making the plot that you see below. In essence, norm isocontours are lines along which the norm of a vector, made up of 
+the x and y - coordinates of the point on the contour is the same, regardless of which point on the contour you pick. 
+Try a bunch of different values below and see how the isocontours change!"""
+
+isocontours_text = """Pretty cool, huh? At least I think so. In any case one thing you may have already guessed is that 
+since we are looking at a 2D vector in this example, the isocontours are just slices of some shape in 3D along a fixed 
+value of z (if we assume x, y to be the components of the vector). Keep note of this as it will be important when we look 
+at the applications in regularization."""
 
 regularization_intro_text = """While all of this is very cool to look at on its own, we don't have to limit ourselves
 to just some nice plots and shapes. Norms play an important role in machine learning when it comes to obtaining models
@@ -54,7 +57,11 @@ class LinearAlgebraComponent(BaseComponent):
             **kwargs
     ) -> dcc.RangeSlider:
         if marks is None:
-            marks = {val: f"{val}" for val in range(min, max + 1, step)}
+            marks = {
+                2: "p = 2",
+                10: "p = 10"
+            }
+            # marks = {val: f"p = {val}" for val in range(min, max + 1, step)}
 
         if value is None:
             value = [2, 10]
@@ -76,6 +83,45 @@ class LinearAlgebraComponent(BaseComponent):
             **kwargs
         )
         return slider
+
+    @staticmethod
+    def alpha_value_range_slider(
+            id: str,
+            min: int = 0,
+            max: int = 5000,
+            value: List[int] = None,
+            step: int = 1,
+            marks: Dict[int, str] = None,
+            tooltip: Dict = None,
+            *args,
+            **kwargs
+    ) -> dcc.RangeSlider:
+        if marks is None:
+            marks = {
+                0: "alpha = 0",
+                100: "alpha = 100"
+            }
+
+            if value is None:
+                value = [0, 100]
+
+            if tooltip is None:
+                tooltip = {
+                    "placement": "right"
+                }
+
+            slider = dcc.RangeSlider(
+                id=id,
+                min=min,
+                max=max,
+                value=value,
+                marks=marks,
+                step=step,
+                tooltip=tooltip,
+                *args,
+                **kwargs
+            )
+            return slider
 
     def vector_input_form_group(
             self,
@@ -183,6 +229,7 @@ class LinearAlgebraComponent(BaseComponent):
             *self.figure("p-vs-norm-plot"),
             *self.text_block(norm_observation_text),
             *self.sub_section_header("Norm Iso-contours"),
+            *self.text_block(norm_isocontours_intro),
             *self.isoline_plot_p_form_group('p-isoline-input'),
             *self.figure("p-isolines-plot"),
             *self.text_block(isocontours_text),
@@ -193,6 +240,7 @@ class LinearAlgebraComponent(BaseComponent):
             *self.text_block(regularization_post_covid_scatter_text),
             *self.get_regression_type_selector("kind-value-selector"),
             *self.get_polynomial_degree_input("poly-degree-input"),
+            *self.alpha_value_range_slider("alpha-range-slider"),
             *self.figure("covid-poly-fit-plot")
         ]
 

@@ -83,12 +83,20 @@ class BaseComponent(BaseModel):
             self,
             text: str,
             classes_to_attach: List[str] = None,
+            wrap_in_tab: bool = False,
+            tab_label: str = None,
             *args,
             **kwargs
     ):
         default_classes = kwargs.pop("default_classes", [])
         classes_to_attach = self.make_classes(classes_to_attach, default_classes)
-        return html.Div(text, className=classes_to_attach, *args, **kwargs)
+        component = html.Div(text, className=classes_to_attach, *args, **kwargs)
+        if wrap_in_tab:
+            component = dbc.Tabs([
+                dbc.Tab(component, label=tab_label)
+            ])
+
+        return component
 
     @decorators.use_default_classes(default_classes="fancy-button btn")
     @decorators.wrap_component_with_breaks()
