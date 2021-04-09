@@ -7,7 +7,7 @@ import dash_html_components as html
 
 from app_factory import app
 from components import PageNotFoundComponent, NavBarComponent
-from components.NavBarComponent import url_section_map
+from components import url_component_map
 from callbacks import linear_algebra_callbacks
 
 
@@ -28,7 +28,7 @@ app.layout = html.Div([
 def router(pathname):
     pathname = pathname.replace("/", "")
     navbar = NavBarComponent.NavBarComponent().layout(pathname)
-    component = url_section_map.get(pathname, None)
+    component = url_component_map.get(pathname, None)
     if component is None:
         component = PageNotFoundComponent.PageNotFoundComponent()
     else:

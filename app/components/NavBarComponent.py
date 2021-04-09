@@ -1,18 +1,7 @@
 import dash_bootstrap_components as dbc
 
 from components.BaseComponent import BaseComponent
-from components import LinearAlgebraComponent, HomeComponent
-
-url_section_map = {
-    "linear_algebra": {
-        "component": LinearAlgebraComponent.LinearAlgebraComponent(),
-        "name": "Linear Algebra"
-    },
-    "home": {
-        "component": HomeComponent.HomeComponent(),
-        "name": "Home"
-    }
-}
+from components import url_component_map
 
 
 class NavBarComponent(BaseComponent):
@@ -23,15 +12,18 @@ class NavBarComponent(BaseComponent):
             current_section_url: str,
             make_dash_component: bool = True,
     ):
-        current_section_blob = url_section_map.get(current_section_url)
+        if current_section_url == "home":
+            current_section_name = "Home"
+
+        current_section_blob = url_component_map.get(current_section_url)
         if current_section_blob is None:
-            current_section_name = "Select a section"
+            current_section_name = "404"
         else:
             current_section_name = current_section_blob.get("name")
 
         children = [
             dbc.DropdownMenuItem(section['name'], href=f"/{section_url}") for
-            section_url, section in url_section_map.items()
+            section_url, section in url_component_map.items()
         ]
 
         layout = dbc.NavbarSimple(
