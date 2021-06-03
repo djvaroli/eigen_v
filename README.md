@@ -16,7 +16,7 @@ and for topics I find particularly interesting or challenging I will try to some
 Gradually, I aim to build up a library of topics from mathematics that I, or anyone else,
 can look at, play around with and hopefully improve their understanding of the underlying concepts.
 
-This site is no running via Google Cloud Run and can be accessed at [eigenvo.com](eigenvo.com)).
+This site is no running via Google Cloud Run and can be accessed at [https://eigenvo.com](eigenvo.com)).
 It's a bit slow at the moment, but I am working on speeding that up while keeping my costs low :)
 
 
